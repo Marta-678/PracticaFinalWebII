@@ -1,0 +1,49 @@
+###
+POST http://localhost:3000/api/users/register
+Content-Type: application/json
+
+{
+    "name": "Max",
+    "email": "Max@correo.es",
+    "password": "123456789",
+    "role": "admin"
+}
+
+###
+POST http://localhost:3000/api/users/validation/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2U5OWZkM2FlOWM1NzI4MzYyM2JhODAiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0MzM2NDA1MSwiZXhwIjoxNzQzMzcxMjUxfQ.pncEdymgWxs640Q7h2LnZ9NWZGH6mLQrjFgjn7nPq18
+Content-Type: application/json
+
+{
+    "email": "Max@correo.es",
+    "verificationCode": "315271"
+}
+
+
+###
+POST http://localhost:3000/api/users/login
+Content-Type: application/json
+
+{
+    "email": "Max@correo.es",
+    "password": "123456789"
+}
+
+###
+PUT http://localhost:3000/api/users/personalData/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2U5OWZkM2FlOWM1NzI4MzYyM2JhODAiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0MzM5NTUzMiwiZXhwIjoxNzQzNDAyNzMyfQ.ZLUuOqOZzD1kvEaZXmA_PaYP4o4Tc-q2NRbUVLfeeSc
+Content-Type: application/json
+
+{
+    "name": "Juan",
+    "lastName": "Pérez",
+    "nif": "12345678A"
+}
+
+###
+PUT  http://localhost:3000/api/users/companyData/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2U5OWZkM2FlOWM1NzI4MzYyM2JhODAiLCJyb2xlIjoidXNlciIsImlhdCI6MTc0MzM5NTUzMiwiZXhwIjoxNzQzNDAyNzMyfQ.ZLUuOqOZzD1kvEaZXmA_PaYP4o4Tc-q2NRbUVLfeeSc
+Content-Type: application/json
+
+{
+    "name": "Juan",
+    "lastName": "Pérez",
+    "nif": "12345678A"
+}

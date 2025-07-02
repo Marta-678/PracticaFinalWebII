@@ -141,46 +141,61 @@ const PersonalDataCtrl= async (req,res) => {
 const CompanyDataCtrl= async (req,res) => {
     try{
         
-        console.log(req.body);
-        // console.log(req.body.name, req.body.lastName, req.body.nif);
-        
-        // const token= req.params.token;
+        const data = matchedData(req);
+        const { token } = req.params;
 
-        // if(!token){
-        //     return handleHttpError(res, "TOKEN_FALTANTE");
-        // }
+        if (!token) return handleHttpError(res, 'TOKEN_FALTANTE', 400);
 
-        // const decoded = verifyToken(token);
+        const decoded = verifyToken(token);
+        if (!decoded) return handleHttpError(res, 'TOKEN_INVALIDO', 401);
 
-        // if (!decoded) {
-        //     return handleHttpError(res, "TOKEN_INVALIDO");
-        // }
+        const user = await usersModel.findById(decoded._id);
+        if (!user) return handleHttpError(res, 'USUARIO_NO_ENCONTRADO', 404);
 
-        // const user = await usersModel.findById(decoded._id);
+        user.company = {
+        ...user.company,
+        name: data.name,
+        cif: data.cif,
+        street: data.street,
+        number: data.number,
+        postal: data.postal,
+        city: data.city,
+        province: data.province
+        };
+        await user.save();
 
-        // if(!user){
-        //     return handleHttpError(res, "USUARIO_NO_ENCONTRADO");
-        // }
-
-        // user.name = req.body.name;
-        // user.lastName = req.body.lastName;
-        // user.nif = req.body.nif;
-
-        // await user.save();
-
-        // console.log(user.lastName, user.name, user.nif);
-
-        // res.send({ message: "Datos personales actualizados correctamente", user });
-
-
+        res.json({ message: 'Datos de compañía actualizados correctamente', user });
     }catch(err){
         console.error(err);
         handleHttpError(res, "ERROR_VALIDATION_PERSONAL_DATA");
     }
 }
 
-const LogoCtrl= ()=>{
+const LogoCtrl= async (req, res) => {
+  try {
+    const { token } = req.params;
+    if (!token) return handleHttpError(res, 'TOKEN_FALTANTE', 400);
 
+    const decoded = verifyToken(token);
+    if (!decoded) return handleHttpError(res, 'TOKEN_INVALIDO', 401);
+
+    const user = await usersModel.findById(decoded._id);
+    if (!user) return handleHttpError(res, 'USUARIO_NO_ENCONTRADO', 404);
+
+    if (!req.file) return handleHttpError(res, 'NO_FILE_UPLOADED', 400);
+
+    // Almacenar logo en el documento del usuario
+    user.company.logo = {
+      data: req.file.buffer,
+      contentType: req.file.mimetype
+    };
+    await user.save();
+
+    res.json({ message: 'Logo subido correctamente' });
+  } catch (error) {
+    console.error('Error en logoUploadCtrl:', error);
+    handleHttpError(res, 'ERROR_LOGO_UPLOAD');
+  }
 }
 
 module.exports={registerCtrl, validationCtrl, loginCtrl, PersonalDataCtrl, CompanyDataCtrl, LogoCtrl}

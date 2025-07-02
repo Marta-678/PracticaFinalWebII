@@ -1,7 +1,4 @@
-const {handleHttpError} = require("../utils/handleError");
-const {verifyToken } = require("../utils/handleJwt");
-const { usersModel } = require("../model/user")
-import { check } from 'express-validator';
+import { check, param, body } from 'express-validator';
 import { validateResults } from '../utils/handleValidator.js';
 
 // Validaciones para registro de usuario
@@ -44,5 +41,26 @@ export const validatorCompanyData = [
   (req, res, next) => validateResults(req, res, next)
 ];
 
+// Validaciones para Client
+export const validatorCreateClient = [
+  check('name').exists().notEmpty().isLength({ min: 2 }),
+  check('contact.email').exists().notEmpty().isEmail(),
+  check('contact.phone').optional().isMobilePhone('es-ES'),
+  check('address.street').optional().isLength({ min: 2 }),
+  check('address.number').optional().isNumeric(),
+  check('address.postal').optional().isNumeric(),
+  check('address.city').optional().isLength({ min: 2 }),
+  check('address.province').optional().isLength({ min: 2 }),
+  (req, res, next) => validateResults(req, res, next)
+];
 
+export const validatorUpdateClient = [
+  param('id').isMongoId(),
+  ...validatorCreateClient,
+  (req, res, next) => validateResults(req, res, next)
+];
 
+export const validatorGetClient = [
+  param('id').isMongoId(),
+  (req, res, next) => validateResults(req, res, next)
+];

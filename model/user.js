@@ -52,7 +52,11 @@ const UserSchema = new mongoose.Schema(
       number: {type:Number},
       postal: {type:Number},
       city: {type: String},
-      province: {type: String}
+      province: {type: String},
+      logo: {
+        data: Buffer,
+        contentType: String
+      }
     }
   },
   {
